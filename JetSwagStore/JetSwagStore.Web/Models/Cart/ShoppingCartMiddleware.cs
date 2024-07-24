@@ -26,7 +26,12 @@ public class ShoppingCartMiddleware : IMiddleware
             if (context.Request.Cookies.TryGetValue(ShoppingCartCookie, out var result) && int.TryParse(result, out id))
             {
                 var cart = await db.ShoppingCarts.FindAsync(id);
-                id = cart?.Id ?? await CreateShoppingCart();
+                if (cart == null)
+                {
+                    id = await CreateShoppingCart();
+                }else{
+                    id = cart.Id;
+                }
             }
         }
 

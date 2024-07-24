@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace JetSwagStore.Models;
 
-public class  StoreDbContext : DbContext
+public class StoreDbContext(DbContextOptions<StoreDbContext> options) : DbContext(options)
 {
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder
-            .UseSqlite("Data Source=store.db")
-            .LogTo(Console.WriteLine);
+    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //     => optionsBuilder
+    //         .UseSqlite("Data Source=store.db")
+    //         .LogTo(Console.WriteLine);
 
     public DbSet<ShoppingCart> ShoppingCarts { get; set; } = null!;
     public DbSet<Product> Products { get; set; } = null!;

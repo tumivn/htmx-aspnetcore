@@ -15,17 +15,24 @@ builder.Services
     })
     .AddRazorRuntimeCompilation();
 
-builder.Services.AddDbContext<StoreDbContext>();
+// builder.Services.AddDbContext<StoreDbContext>();
 builder.Services.AddShoppingCart();
+builder.Services.AddDbContextFactory<StoreDbContext>(options =>
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("jetstore") ?? string.Empty, 
+        b=>b.MigrationsAssembly("JetSwagStore"));
+});
 
 var app = builder.Build();
 
+
+
 // migrate to latest database version
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<StoreDbContext>();
-    await db.Database.MigrateAsync();
-}
+// using (var scope = app.Services.CreateScope())
+// {
+//     var db = scope.ServiceProvider.GetRequiredService<StoreDbContext>();
+//     await db.Database.MigrateAsync();
+// }
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
